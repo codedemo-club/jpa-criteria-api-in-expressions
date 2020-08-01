@@ -9,6 +9,13 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.domain.Specification;
+
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,6 +56,25 @@ class DeptEmployeeRepositoryTest {
             }
             this.deptEmployeeCrudRepository.save(deptEmployee);
         }
+    }
+
+    @Test
+    void spring() {
+        String[] titles = {title};
+        Specification<DeptEmployee> deptEmployeeSpecification = new Specification<DeptEmployee>() {
+            @Override
+            public Predicate toPredicate(Root<DeptEmployee> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+
+                CriteriaBuilder.In<String> inClause = criteriaBuilder.in(root.get("title"));
+                for (String title : titles) {
+                    inClause.value(title);
+                }
+               return inClause;
+            }
+        };
+
+
+        assertEquals(10,  this.deptEmployeeCrudRepository.findAll(deptEmployeeSpecification).size());
     }
 
     @Test
