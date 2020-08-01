@@ -1,3 +1,6 @@
+功能代码请参考：DeptEmployeeRepository
+使用方法及验证性代码请参考：DeptEmployeeRepositoryTest
+
 # Read Me First
 The following was discovered as part of building this project:
 
